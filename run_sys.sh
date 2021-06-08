@@ -29,21 +29,17 @@ function system() {
 
 function networks() {
   CHKNETWORK=`"$SUPERTAGET" docker network ls`
-  CHKBRIDGE=`echo "$CHKNETWORK" | grep fruit-bridge"`
+  CHKBRIDGE=`echo "$CHKNETWORK" | grep redshark-bridge`
 
   if [ -z "CHKBRIDGE" ] || [ "CHKBRIDGE" == "" ]; then
-    "$SUPERTAGET" docker network create --driver bridge fruit-bridge
+    "$SUPERTAGET" docker network create redshark-bridge
   else
-    "$SUPERTAGET" docker network ls | grep -E "fruit-bridge"
+    "$SUPERTAGET" docker network ls | grep -E "redshark-bridge"
   fi
 }
 
 function folders() {
   _PWD=`pwd`
-  mkdir -p "$_PWD/mysql_custom_system"
-  mkdir -p "$_PWD/mysql_custom_configuration_80"
-  mkdir -p "$_PWD/php_custom_final_web"
-  mkdir -p "$_PWD/php_custom_nginx_conf"
 }
 
 function update() {
@@ -60,6 +56,8 @@ function main() {
   networks
   folders
   update
+
+  yes | "$SUPERTAGET" docker system prune
 }
 
 main
